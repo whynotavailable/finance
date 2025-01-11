@@ -4,7 +4,7 @@ project(finance LANGUAGES CXX)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 6.8 REQUIRED COMPONENTS Core Widgets)
 
 qt_standard_project_setup()
 
