@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+open --stderr bin/log bin/finance.app
+
