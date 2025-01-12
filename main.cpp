@@ -9,10 +9,6 @@
 #include <sstream>
 
 int main(int argc, char *argv[]) {
-    std::ostringstream connStrStream;
-    connStrStream << "file:" << getenv("HOME") << "/finance.db";
-    std::string connStr = connStrStream.str();
-
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
