@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include <QDir>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QStandardPaths>
@@ -8,7 +9,6 @@
 #include <QtGui/qicon.h>
 #include <QtWidgets/qapplication.h>
 #include <iostream>
-#include <sstream>
 
 const char *sql = "CREATE TABLE IF NOT EXISTS COMPANY("
                   "ID INT PRIMARY KEY     NOT NULL,"
@@ -28,7 +28,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     QString appData =
-        QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+    QDir appDataPath(appData);
+    if (!appDataPath.exists()) {
+        appDataPath.mkpath(".");
+    }
 
     // TODO: At some point, make this user selectable;
     auto dbFile = appData + "/finance.db";
