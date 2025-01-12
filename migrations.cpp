@@ -1,3 +1,4 @@
+#include "migrations.h"
 #include <QApplication>
 #include <QDebug>
 #include <QSqlDatabase>
@@ -7,7 +8,7 @@
 const int max_version = 1;
 
 // The first migration just adds the version table.
-const char *m_00 = R"ll(
+const char *m_0 = R"ll(
 CREATE TABLE IF NOT EXISTS config (
     key TEXT PRIMARY KEY,
     value TEXT
@@ -72,7 +73,7 @@ int migrate_db() {
 
     qInfo() << "Migrating version from" << version << "to" << max_version;
 
-    migrate(version, 0, m_00);
+    migration_version(version, 0);
 
     return 0;
 }
