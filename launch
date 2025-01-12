@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-cd build
-make
+CMAKE_BINARY_DIR=build cmake --build build
 
-# Actually let's just do this.
-finance.app/Contents/MacOS/finance
+build/finance.app/Contents/MacOS/finance
