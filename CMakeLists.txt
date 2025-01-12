@@ -5,7 +5,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(Qt6 6.8 REQUIRED COMPONENTS Core Widgets Sql)
-find_package(SQLite3)
 
 qt_standard_project_setup()
 
@@ -21,7 +20,6 @@ target_link_libraries(finance
         Qt::Core
         Qt::Widgets
         Qt::Sql
-        SQLite3
 )
 
 include(GNUInstallDirs)
