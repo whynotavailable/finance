@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
+#include <QStackedWidget>
 #include <QStatusBar>
 
 class MainWindow : public QMainWindow {
@@ -17,5 +18,6 @@ public:
 private:
     QMenu *fileMenu;
     QAction *newAct;
+    QStackedWidget *stack;
 };
 #endif // MAINWINDOW_H
