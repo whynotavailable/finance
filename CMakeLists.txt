@@ -12,6 +12,8 @@ qt_add_executable(finance
     main.cpp
     mainwindow.cpp
     mainwindow.h
+    migrations.h
+    migrations.cpp
 )
 
 target_link_libraries(finance

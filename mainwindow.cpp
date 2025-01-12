@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "migrations.h"
 #include <QDir>
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -53,6 +54,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
         } else {
             qInfo() << "db good to go";
         }
+
+        migrate_db();
     }
 }
 
