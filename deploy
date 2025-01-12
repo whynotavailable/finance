@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+rm -rf build/finance.app
+
+CMAKE_BINARY_DIR=build cmake --build build --target clean
+CMAKE_BINARY_DIR=build cmake --build build --target all
+
+cd build
+macdeployqt finance.app
+
+codesign -s - --deep finance.app
+
