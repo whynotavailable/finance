@@ -1,9 +1,10 @@
+#include <QApplication>
 #include <QDebug>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 
-const int version = 1;
+const int max_version = 1;
 
 // The first migration just adds the version table.
 const char *m_00 = R"ll(
@@ -35,8 +36,9 @@ int migrate(int current, int target, const char *query_text) {
         r = q.exec(query);
 
         if (!r) {
-            qDebug() << q.lastError();
+            qFatal() << "Migration Failed" << q.lastError();
             QSqlDatabase::database().rollback();
+            QApplication::exit();
             return 1;
         }
     }
@@ -63,7 +65,12 @@ int get_version() {
 
 int migrate_db() {
     int version = get_version();
-    qInfo() << "Current Db Version" << version;
+
+    if (version >= max_version) {
+        return 0;
+    }
+
+    qInfo() << "Migrating version from" << version << "to" << max_version;
 
     migrate(version, 0, m_00);
 
