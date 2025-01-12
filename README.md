@@ -2,11 +2,16 @@
 
 ## To build (outside of qt creator).
 
-```
-export CMAKE_PREFIX_PATH="{YOUR QT CMAKE DIR}"
-cmake .
+```sh
+# Either at {QT_DIR}/bin/ to your PATH or use the full path.
+qt-cmake -S . -B build
 
+cd build
 make
+
+cd ..
+
+ln -s build/compile_commands.json compile_commands.json
 ```
 
 I have literally no idea if this will build outside of mac with the current lists. Try it and let me know if it doesn't

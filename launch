@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-open --stderr bin/log --stdout bin/out bin/finance.app
+cd build
+make
+
+# Actually let's just do this.
+finance.app/Contents/MacOS/finance
