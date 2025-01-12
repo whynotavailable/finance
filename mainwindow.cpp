@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
         if (!query.exec(sql)) {
             std::cerr << "err: " << ok;
         } else {
-            std::cerr << "good to go";
+            qInfo() << "db good to go";
         }
     }
 }
