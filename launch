@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-open --stderr bin/log bin/finance.app
-
+open --stderr bin/log --stdout bin/out bin/finance.app
