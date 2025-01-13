@@ -1,6 +1,7 @@
 #include "migrations.h"
 #include <QApplication>
 #include <QDebug>
+#include <QFile>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -8,49 +9,8 @@
 
 const int max_version = 1;
 
-// The first migration just adds the version table.
-const char *m_0 = R"ll(
-PRAGMA foreign_keys = ON;
---#--
-CREATE TABLE IF NOT EXISTS config (
-    key TEXT PRIMARY KEY,
-    value TEXT
-);
---#--
-INSERT INTO config (key, value) VALUES ('db-version', '0')
-ON CONFLICT DO NOTHING;
-)ll";
-
-const char *m_1 = R"ll(
-CREATE TABLE account
-(
-    id   TEXT PRIMARY KEY,
-    name TEXT NOT NULL
-);
---#--
-CREATE TABLE category
-(
-    id   TEXT PRIMARY KEY,
-    name TEXT NOT NULL
-);
---#--
-CREATE TABLE entry
-(
-    id        TEXT PRIMARY KEY,
-    account   TEXT   NOT NULL REFERENCES account (id),
-    category  TEXT REFERENCES category (id),
-    timestamp BIGINT NOT NULL,
-    memo      TEXT,
-    amount    INT    NOT NULL
-);
-)ll";
-
-int migrate(int current, int target, const char *query_text) {
-    if (current >= target) {
-        return 0;
-    }
-
-    auto q_splits = QString(query_text).split("--#--");
+int migrate(int target, QString query_text) {
+    auto q_splits = query_text.split("--#--");
 
     QSqlDatabase::database().transaction();
 
@@ -113,8 +73,22 @@ int migrate_db() {
 
     qInfo() << "Migrating version from" << version << "to" << max_version;
 
-    migration_version(version, 0);
-    migration_version(version, 1);
+    for (int i = (version + 1); i <= max_version; i++) {
+        auto str = QString(":/sql/%1.sql")
+                       .arg(QString::number(i).rightJustified(2, '0'));
+
+        QFile sql_file(str);
+        if (sql_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream in(&sql_file);
+            QString content = in.readAll();
+            sql_file.close();
+
+            // Now you have the file content in the 'content' QString
+            migrate(i, content);
+        } else {
+            qDebug() << "Error opening file: " << sql_file.errorString() << str;
+        }
+    }
 
     return 0;
 }

@@ -2,13 +2,17 @@ cmake_minimum_required(VERSION 3.19)
 project(finance LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 6.8 REQUIRED COMPONENTS Core Widgets Sql)
+
+file(GLOB SQL "sql/*.sql")
 
 qt_standard_project_setup()
 
 qt_add_executable(finance
     WIN32 MACOSX_BUNDLE
+    sql.qrc
     main.cpp
     mainwindow.cpp
     mainwindow.h

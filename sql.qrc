@@ -1,0 +1,6 @@
+<RCC>
+    <qresource>
+        <file>sql/00.sql</file>
+        <file>sql/01.sql</file>
+    </qresource>
+</RCC>
