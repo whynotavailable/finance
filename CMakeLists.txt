@@ -6,8 +6,6 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 6.8 REQUIRED COMPONENTS Core Widgets Sql)
 
-file(GLOB SQL "sql/*.sql")
-
 qt_standard_project_setup()
 
 qt_add_executable(finance
@@ -18,6 +16,7 @@ qt_add_executable(finance
     mainwindow.h
     migrations.h
     migrations.cpp
+    common.h
 )
 
 target_link_libraries(finance

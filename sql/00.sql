@@ -1,6 +1,6 @@
 PRAGMA foreign_keys = ON;
 --#--
-CREATE TABLE IF NOT EXISTS config (
+CREATE TABLE config (
     key TEXT PRIMARY KEY,
     value TEXT
 );

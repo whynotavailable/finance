@@ -1,14 +1,11 @@
 #include "mainwindow.h"
+#include "common.h" // IWYU pragma: export
 #include "migrations.h"
-#include <QApplication>
 #include <QDir>
 #include <QDirIterator>
 #include <QIcon>
 #include <QLabel>
-#include <QSqlDatabase>
-#include <QSqlQuery>
 #include <QStandardPaths>
-#include <QString>
 
 void init_db() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");

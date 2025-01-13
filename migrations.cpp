@@ -1,10 +1,6 @@
 #include "migrations.h"
-#include <QApplication>
-#include <QDebug>
+#include "common.h" // IWYU pragma: export
 #include <QFile>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
 #include <string>
 
 const int max_version = 1;
