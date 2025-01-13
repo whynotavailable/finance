@@ -4,11 +4,14 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <string>
 
 const int max_version = 1;
 
 // The first migration just adds the version table.
 const char *m_0 = R"ll(
+PRAGMA foreign_keys = ON;
+--#--
 CREATE TABLE IF NOT EXISTS config (
     key TEXT PRIMARY KEY,
     value TEXT
@@ -16,6 +19,30 @@ CREATE TABLE IF NOT EXISTS config (
 --#--
 INSERT INTO config (key, value) VALUES ('db-version', '0')
 ON CONFLICT DO NOTHING;
+)ll";
+
+const char *m_1 = R"ll(
+CREATE TABLE account
+(
+    id   TEXT PRIMARY KEY,
+    name TEXT NOT NULL
+);
+--#--
+CREATE TABLE category
+(
+    id   TEXT PRIMARY KEY,
+    name TEXT NOT NULL
+);
+--#--
+CREATE TABLE entry
+(
+    id        TEXT PRIMARY KEY,
+    account   TEXT   NOT NULL REFERENCES account (id),
+    category  TEXT REFERENCES category (id),
+    timestamp BIGINT NOT NULL,
+    memo      TEXT,
+    amount    INT    NOT NULL
+);
 )ll";
 
 int migrate(int current, int target, const char *query_text) {
@@ -42,6 +69,19 @@ int migrate(int current, int target, const char *query_text) {
             QApplication::exit();
             return 1;
         }
+    }
+
+    QSqlQuery set_version(
+        "UPDATE config SET value = ? WHERE key = 'db-version'");
+    set_version.addBindValue(QString::fromStdString(std::to_string(target)));
+
+    bool set_version_ok = set_version.exec();
+
+    if (!set_version_ok) {
+        qFatal() << "Failed to set db-version" << set_version.lastError();
+        QSqlDatabase::database().rollback();
+        QApplication::exit();
+        return 1;
     }
 
     QSqlDatabase::database().commit();
@@ -74,6 +114,7 @@ int migrate_db() {
     qInfo() << "Migrating version from" << version << "to" << max_version;
 
     migration_version(version, 0);
+    migration_version(version, 1);
 
     return 0;
 }
